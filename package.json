@@ -8,6 +8,7 @@
     "ffmpeg-binaries": "^4.0.0",
     "fs": "0.0.1-security",
     "get-youtube-id": "^1.0.1",
+    "nodemon": "^1.19.3",
     "opusscript": "0.0.7",
     "random-puppy": "^1.1.0",
     "request": "^2.88.0",

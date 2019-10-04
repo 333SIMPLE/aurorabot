@@ -16,13 +16,6 @@ client.on('message', message => {
   const args = message.content.slice(prefix.length).trim().split(/ +/g);
   let member = message.member
 
-
-// USEFUL COMMAND AREA  
-// USEFUL COMMAND AREA
-// USEFUL COMMAND AREA
-
-
-// ping command
    if (message.content === `${prefix}ping`) {
     message.channel.send('Pinging...').then(m => {
       let ping = m.createdTimestamp - message.createdTimestamp
@@ -36,20 +29,17 @@ client.on('message', message => {
     .setFooter(`Requested by ${message.author.tag}`)
     .setColor("#a500ff")
     .setTimestamp()
-    .addField("Helpful Commands", `~ping  | Pong?
-    ~help  | Sends you this message.
-    ~av    | Fetches your avatar, or someone you mention.`)
-    .addField("Fun Commands", `~8ball | Let the Magic 8-ball answer your life questions.
-    ~kiss  | Give someone a kiss!
-    ~kill  | Kill someone!`)
-    .addField(`Media Commands`, `~meme | Fetches you a random dank meme.`)
+    .addField("Helpful Commands", `~ping    | Pong?
+    ~help    | Sends you this message.
+    ~av      | Fetches your avatar, or someone you mention.`)
+    .addField("Fun Commands", `~8ball   | Let the Magic 8-ball answer your life questions.
+    ~kiss    | Give someone a kiss!
+    ~kill    | Kill someone!`)
+    .addField(`Media Commands`, `~meme    | Fetches you a random dank meme.`)
     message.channel.send("Sent.");
     message.member.send(help);
   }
 
-// fun commands
-
-// 8ball command
   else if (message.content.startsWith(`${prefix}8ball`)) {
     
     if(!args[2]) {
@@ -77,7 +67,6 @@ client.on('message', message => {
     message.channel.send(eightball)
   }
 
-// kiss command
 else if (message.content.startsWith(`${prefix}kiss`)) {
   var kissuser = message.mentions.members.first()
             if(!kissuser){
@@ -96,7 +85,6 @@ else if (message.content.startsWith(`${prefix}kiss`)) {
             message.channel.send(kissembed)
 }
 
-// kill command
 else if (message.content.startsWith(`${prefix}kill`)) {
   var killuser = message.mentions.members.first()
             if(!killuser){

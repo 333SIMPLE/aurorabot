@@ -211,7 +211,7 @@ client.on('message', message => {
     if (!message.guild.voiceConnection) message.member.voiceChannel.join().then(function (connection) {
       play(connection, message)
     });
-  
+  // SKIP COMMAND
     else if (message.content.startsWith(`${prefix}skip`)) {
       var server = servers[message.guild.id];
       message.channel.send("Ok Skipped")
@@ -219,6 +219,7 @@ client.on('message', message => {
       if (server.dispatcher) server.dispatcher.end();
     }
   } 
+  //STOP COMMAND currently broken
   else if (message.content.startsWith(`${prefix}stop`)) {
     var server = servers[message.guild.id];
     if (message.guild.voiceConnection) message.guild.voiceConnection.disconnect();

@@ -41,6 +41,7 @@ const serverQueue = queue.get(msg.guild.id);
     });
 
   }
+  
   else if (message.content === `${prefix}help`) {
     const help = new Discord.RichEmbed()
     .setFooter(`Requested by ${message.author.tag}`)

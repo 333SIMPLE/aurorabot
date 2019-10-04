@@ -1,26 +1,7 @@
 const Discord = require('discord.js');
-var { prefix, token } = require('./config.json');
+var { prefix, token, googleapi } = require('./config.json');
 const client = new Discord.Client();
-const snekfetch = require("snekfetch");
 const randomPuppy = require('random-puppy')
-const YTDL = require("ytdl-core")
-const getYouTubeID = require("get-youtube-id")
-const fetchVideoInfo = require("youtube-info")
-const servers = require("net")
-
-function play(connection, message) {
-  var server = servers[message.guild.id];
-  server.dispatcher = connection.playStream(YTDL(server.queue[0], { filter: "audioonly" }));
-
-  server.queue.shift();
-
-  server.dispatcher.on("end", function () {
-    if (server.queue[0]) play(connection, message);
-    else connection.disconnect();
-
-  })
-}
-
 
 client.once('ready', () => {
   console.log('Aurora is ready to go.');
@@ -31,8 +12,18 @@ client.once('ready', () => {
 
 
 client.on('message', message => {
-  const args = message.content.slice(prefix.length).trim().split(/ +/g);
   let member = message.member
+  const msg = message
+  const args = message.content.slice(prefix.length).trim().split(/ +/g);
+
+  // music variables
+const searchString = args.slice(1).join(' ');
+const url = args[1] ? args[1].replace(/<(.+)>/g, '$1') : '';
+const YouTube = require('simple-youtube-api');
+const youtube = new YouTube(googleapi)
+const ytdl = require('ytdl-core');
+const queue = new Map();
+const serverQueue = queue.get(msg.guild.id);
 
    if (message.content === `${prefix}ping`) {
 
@@ -62,18 +53,6 @@ client.on('message', message => {
     ~kiss    | Give someone a kiss!
     ~kill    | Kill someone!`)
     .addField(`Media Commands`, `~meme    | Fetches you a random dank meme.`)
-      .setFooter(`Requested by ${message.author.tag}`)
-      .setColor("#a500ff")
-      .setTimestamp()
-      .addField("Helpful Commands", `~ping  | Pong?
-    ~help  | Sends you this message.
-    ~av    | Fetches your avatar, or someone you mention.`)
-      .addField("Fun Commands", `~8ball | Let the Magic 8-ball answer your life questions.
-    ~kiss  | Give someone a kiss!
-    ~kill  | Kill someone!`)
-      .addField(`Media Commands`, `~meme | Fetches you a random dank meme.
-      ~play | Plays Music!
-      ~disconnect | Makes the bot disconnect from the voice channel it's in.`)
     message.channel.send("Sent.");
     message.member.send(help);
   }
@@ -235,58 +214,6 @@ else if (message.content.startsWith(`${prefix}kill`)) {
     }
     message.channel.send(memberMention.user.displayAvatarURL)
   }
-  // play command 
-
-  else if (message.content.startsWith(`${prefix}play`)) {
-    if (!args[1]) {
-      var server = servers[message.guild.id];
-      message.channel.send("Please Provide a Link")
-      return;
-    }
-
-    if (!message.member.voiceChannel) {
-      message.channel.send("You must be in a voice channel ")
-      return;
-    }
-
-    if (!servers[message.guild.id]) servers[message.guild.id] = {
-      queue: []
-    };
-    var server = servers[message.guild.id];
-
-    server.queue.push(args[1]);
-
-    if (!message.guild.voiceConnection) message.member.voiceChannel.join().then(function (connection) {
-      play(connection, message)
-      message.channel.send("Ok playing requested song")
-    });
-    // SKIP COMMAND currently broken
-    else if (message.content.startsWith(`${prefix}skip`)) {
-      var server = servers[message.guild.id];
-      const skipembed = new Discord.RichEmbed
-      .setAuthor("Skip Report")
-      .setDescription(`Successfully skipped ${video.snippet.title}`)
-      .setTimestamp()
-      .setFooter(`Requested by ${message.author.tag}`)
-      .setColor(`#a500ff`)
-      message.channel.send("Ok Skipped")
-      if (server.dispatcher) server.dispatcher.end();
-    }
-  }
-  //STOP COMMAND
-  else if (message.content.startsWith(`${prefix}disconnect`)) {
-    var server = servers[message.guild.id];
-    if (message.guild.voiceConnection) message.guild.voiceConnection.disconnect();{
-    const dc = new Discord.RichEmbed()
-    .setAuthor("Disconnect Report")
-    .setDescription(`Successfully disconnected from ${message.author.member.voiceChannel.name}.`)
-    .setTimestamp()
-    .setFooter(`Requested by ${message.author.tag}`)
-    .setColor(`#a500ff`)
-      message.channel.send(dc)
-    }
-  }
 }
-
 });
 client.login(token);

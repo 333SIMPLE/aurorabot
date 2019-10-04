@@ -1,0 +1,17 @@
+{
+  "name": "tyler",
+  "version": "1.0.0",
+  "description": "Tyler, The Creator",
+  "main": "index.js",
+  "dependencies": {
+    "discord.js": "^11.5.1",
+    "random-puppy": "^1.1.0",
+    "snekfetch": "^4.0.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "333SIMPLE",
+  "license": "ISC"
+}

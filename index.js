@@ -60,7 +60,9 @@ client.on('message', message => {
       .addField("Fun Commands", `~8ball | Let the Magic 8-ball answer your life questions.
     ~kiss  | Give someone a kiss!
     ~kill  | Kill someone!`)
-      .addField(`Media Commands`, `~meme | Fetches you a random dank meme.`)
+      .addField(`Media Commands`, `~meme | Fetches you a random dank meme.
+      ~play | Plays Music!
+      ~stop | Makes bot leave VC`)
     message.channel.send("Sent.");
     message.member.send(help);
   }
@@ -205,21 +207,20 @@ client.on('message', message => {
       queue: []
     };
     var server = servers[message.guild.id];
-    
+
     server.queue.push(args[1]);
 
     if (!message.guild.voiceConnection) message.member.voiceChannel.join().then(function (connection) {
       play(connection, message)
       message.channel.send("Ok playing requested song")
     });
-  // SKIP COMMAND currently broken
+    // SKIP COMMAND currently broken
     else if (message.content.startsWith(`${prefix}skip`)) {
       var server = servers[message.guild.id];
       message.channel.send("Ok Skipped")
-
       if (server.dispatcher) server.dispatcher.end();
     }
-  } 
+  }
   //STOP COMMAND
   else if (message.content.startsWith(`${prefix}stop`)) {
     var server = servers[message.guild.id];

@@ -24,7 +24,7 @@ function play(connection, message) {
 
 client.once('ready', () => {
   console.log('Aurora is ready to go.');
-  client.user.setActivity('in beta.', {
+  client.user.setActivity('In beta (1.1.2)', {
     type: 'PLAYING'
   });
 })
@@ -210,8 +210,9 @@ client.on('message', message => {
 
     if (!message.guild.voiceConnection) message.member.voiceChannel.join().then(function (connection) {
       play(connection, message)
+      message.channel.send("Ok playing requested song")
     });
-  // SKIP COMMAND
+  // SKIP COMMAND currently broken
     else if (message.content.startsWith(`${prefix}skip`)) {
       var server = servers[message.guild.id];
       message.channel.send("Ok Skipped")
@@ -219,7 +220,7 @@ client.on('message', message => {
       if (server.dispatcher) server.dispatcher.end();
     }
   } 
-  //STOP COMMAND currently broken
+  //STOP COMMAND
   else if (message.content.startsWith(`${prefix}stop`)) {
     var server = servers[message.guild.id];
     if (message.guild.voiceConnection) message.guild.voiceConnection.disconnect();

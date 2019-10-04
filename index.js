@@ -73,7 +73,7 @@ client.on('message', message => {
     ~kill  | Kill someone!`)
       .addField(`Media Commands`, `~meme | Fetches you a random dank meme.
       ~play | Plays Music!
-      ~stop | Makes bot leave VC`)
+      ~disconnect | Makes the bot disconnect from the voice channel it's in.`)
     message.channel.send("Sent.");
     message.member.send(help);
   }
@@ -279,7 +279,7 @@ else if (message.content.startsWith(`${prefix}kill`)) {
     if (message.guild.voiceConnection) message.guild.voiceConnection.disconnect();{
     const dc = new Discord.RichEmbed()
     .setAuthor("Disconnect Report")
-    .setDescription(`Successfully disconnected from ${message.author.voiceChannel.username}`)
+    .setDescription(`Successfully disconnected from ${message.author.member.voiceChannel.name}.`)
     .setTimestamp()
     .setFooter(`Requested by ${message.author.tag}`)
     .setColor(`#a500ff`)

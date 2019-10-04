@@ -263,15 +263,28 @@ else if (message.content.startsWith(`${prefix}kill`)) {
     // SKIP COMMAND currently broken
     else if (message.content.startsWith(`${prefix}skip`)) {
       var server = servers[message.guild.id];
+      const skipembed = new Discord.RichEmbed
+      .setAuthor("Skip Report")
+      .setDescription(`Successfully skipped ${video.snippet.title}`)
+      .setTimestamp()
+      .setFooter(`Requested by ${message.author.tag}`)
+      .setColor(`#a500ff`)
       message.channel.send("Ok Skipped")
       if (server.dispatcher) server.dispatcher.end();
     }
   }
   //STOP COMMAND
-  else if (message.content.startsWith(`${prefix}stop`)) {
+  else if (message.content.startsWith(`${prefix}disconnect`)) {
     var server = servers[message.guild.id];
-    if (message.guild.voiceConnection) message.guild.voiceConnection.disconnect();
-    message.channel.send("Ok Stopped")
+    if (message.guild.voiceConnection) message.guild.voiceConnection.disconnect();{
+    const dc = new Discord.RichEmbed()
+    .setAuthor("Disconnect Report")
+    .setDescription(`Successfully disconnected from ${message.author.voiceChannel.username}`)
+    .setTimestamp()
+    .setFooter(`Requested by ${message.author.tag}`)
+    .setColor(`#a500ff`)
+      message.channel.send(dc)
+    }
   }
 }
 

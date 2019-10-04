@@ -34,9 +34,7 @@ client.on('message', message => {
   const args = message.content.slice(prefix.length).trim().split(/ +/g);
   let member = message.member
 
-<<<<<<< HEAD
    if (message.content === `${prefix}ping`) {
-=======
 
   // USEFUL COMMAND AREA  
   // USEFUL COMMAND AREA
@@ -45,7 +43,6 @@ client.on('message', message => {
 
   // ping command
   if (message.content === `${prefix}ping`) {
->>>>>>> origin/Develop
     message.channel.send('Pinging...').then(m => {
       let ping = m.createdTimestamp - message.createdTimestamp
 
@@ -55,7 +52,6 @@ client.on('message', message => {
   }
   else if (message.content === `${prefix}help`) {
     const help = new Discord.RichEmbed()
-<<<<<<< HEAD
     .setFooter(`Requested by ${message.author.tag}`)
     .setColor("#a500ff")
     .setTimestamp()
@@ -66,7 +62,6 @@ client.on('message', message => {
     ~kiss    | Give someone a kiss!
     ~kill    | Kill someone!`)
     .addField(`Media Commands`, `~meme    | Fetches you a random dank meme.`)
-=======
       .setFooter(`Requested by ${message.author.tag}`)
       .setColor("#a500ff")
       .setTimestamp()
@@ -79,17 +74,13 @@ client.on('message', message => {
       .addField(`Media Commands`, `~meme | Fetches you a random dank meme.
       ~play | Plays Music!
       ~stop | Makes bot leave VC`)
->>>>>>> origin/Develop
     message.channel.send("Sent.");
     message.member.send(help);
   }
 
-<<<<<<< HEAD
-=======
   // fun commands
 
   // 8ball command
->>>>>>> origin/Develop
   else if (message.content.startsWith(`${prefix}8ball`)) {
 
     if (!args[2]) {
@@ -117,7 +108,6 @@ client.on('message', message => {
     message.channel.send(eightball)
   }
 
-<<<<<<< HEAD
 else if (message.content.startsWith(`${prefix}kiss`)) {
   var kissuser = message.mentions.members.first()
             if(!kissuser){
@@ -153,7 +143,6 @@ else if (message.content.startsWith(`${prefix}kill`)) {
             .setDescription(`${message.author} killed **${killuser}**.`)
             message.channel.send(killembed)
 }
-=======
   // kiss command
   else if (message.content.startsWith(`${prefix}kiss`)) {
     var kissuser = message.mentions.members.first()
@@ -211,7 +200,6 @@ else if (message.content.startsWith(`${prefix}kill`)) {
           .setTimestamp()
           .setImage(url);
         message.channel.send(memeembed)
->>>>>>> origin/Develop
 
       })
   }
@@ -285,5 +273,7 @@ else if (message.content.startsWith(`${prefix}kill`)) {
     if (message.guild.voiceConnection) message.guild.voiceConnection.disconnect();
     message.channel.send("Ok Stopped")
   }
+}
+
 });
 client.login(token);

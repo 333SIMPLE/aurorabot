@@ -1,59 +1,89 @@
 const Discord = require('discord.js');
-var { prefix, token, googleapi } = require('./config.json');
+const { Client, Collection } = require("discord.js");
+var { prefix, token } = require('./config.json');
 const client = new Discord.Client();
-const randomPuppy = require('random-puppy')
+const snekfetch = require("snekfetch");
+const randomPuppy = require('random-puppy');
+const YTDL = require("ytdl-core");
+const getYouTubeID = require("get-youtube-id");
+const fetchVideoInfo = require("youtube-info");
+const servers = require("net");
+const search = require("yt-search");
+const fs = require("fs");
+const bot = new Discord.Client({ dissableEveryone: true });
+
+bot.commands = new Discord.Collection();
+
+client.commands = new Collection();
+client.aliases = new Collection();
+
+["command"].forEach(handler => {
+  require(`./hand/${handler}`)(client);
+});
+
+exports.play = function(){
+
+}
+
+function play(connection, message) {
+  var server = servers[message.guild.id];
+  server.dispatcher = connection.playStream(YTDL(server.queue[0], { filter: "audioonly" }));
+
+  server.queue.shift();
+
+  server.dispatcher.on("end", function () {
+    if (server.queue[0]) play(connection, message);
+    else connection.disconnect();
+
+  })
+}
+
 
 client.once('ready', () => {
-  console.log('Aurora is ready to go.');
-  client.user.setActivity('In beta (1.1.2)', {
+  console.log(`Aurora is ready to go. Online on ${bot.guilds.size} Servers!`);
+  client.user.setActivity('In beta (2.3.0)!help', {
     type: 'PLAYING'
   });
 })
 
 
+
 client.on('message', message => {
-  let member = message.member
-  const msg = message
+
+  if (message.author.bot) return;
+  if (!message.guild) return;
+  if (!message.content.startsWith(prefix)) return;
+
+
   const args = message.content.slice(prefix.length).trim().split(/ +/g);
+  const cmd = args.shift().toLowerCase();
 
-  // music variables
-const searchString = args.slice(1).join(' ');
-const url = args[1] ? args[1].replace(/<(.+)>/g, '$1') : '';
-const YouTube = require('simple-youtube-api');
-const youtube = new YouTube(googleapi)
-const ytdl = require('ytdl-core');
-const queue = new Map();
-const serverQueue = queue.get(msg.guild.id);
+  if (cmd.length === 0) return;
 
-   if (message.content === `${prefix}ping`) {
+  let command = client.commands.get(cmd);
+  if (!command) command - client.commands.get(client.aliases.get(cmd));
 
+  if (command)
+    command.run(client, message, args);
   // USEFUL COMMAND AREA  
   // USEFUL COMMAND AREA
   // USEFUL COMMAND AREA
-
-
-  // ping command
-  if (message.content === `${prefix}ping`) {
-    message.channel.send('Pinging...').then(m => {
-      let ping = m.createdTimestamp - message.createdTimestamp
-
-      m.edit(`My ping is ${ping}.`)
-    });
-
-  }
-  
   else if (message.content === `${prefix}help`) {
     const help = new Discord.RichEmbed()
-    .setFooter(`Requested by ${message.author.tag}`)
-    .setColor("#a500ff")
-    .setTimestamp()
-    .addField("Helpful Commands", `~ping    | Pong?
-    ~help    | Sends you this message.
-    ~av      | Fetches your avatar, or someone you mention.`)
-    .addField("Fun Commands", `~8ball   | Let the Magic 8-ball answer your life questions.
-    ~kiss    | Give someone a kiss!
-    ~kill    | Kill someone!`)
-    .addField(`Media Commands`, `~meme    | Fetches you a random dank meme.`)
+      .setFooter(`Requested by ${message.author.tag}`)
+      .setColor("#a500ff")
+      .setTimestamp()
+      .addField("Helpful Commands", `!ping  | Pong?
+    !help  | Sends you this message.
+    !av    | Fetches your avatar, or someone you mention.`)
+      .addField("Fun Commands", `!8ball | Let the Magic 8-ball answer your life questions.
+    !kiss  | Give someone a kiss!
+    !kill  | Kill someone!`)
+      .addField(`Media Commands`, `!meme | Fetches you a random dank meme.
+      !link | Link a youtube song For the bot to play
+      !stop | Makes bot leave VC
+      !skip | Skips current song!
+      !play | search for a song on youtube`)
     message.channel.send("Sent.");
     message.member.send(help);
   }
@@ -87,61 +117,6 @@ const serverQueue = queue.get(msg.guild.id);
       .addField("Answer", replies[result])
     message.channel.send(eightball)
   }
-
-else if (message.content.startsWith(`${prefix}kiss`)) {
-  var kissuser = message.mentions.members.first()
-            if(!kissuser){
-              const kisserror = new Discord.RichEmbed()
-              .setTitle('Error')
-              .setDescription(`Mention the user you would like to kiss!`)
-              .setColor("#a500ff")
-              .setTimestamp()
-              return message.channel.send(kisserror)
-            }
-            const kissembed = new Discord.RichEmbed()
-            .setFooter(`Requested by ${message.author.tag}`)
-            .setTimestamp()
-            .setColor("#a500ff")
-            .setDescription(`${message.author} gave **${kissuser}** a kiss!`)
-            message.channel.send(kissembed)
-}
-
-else if (message.content.startsWith(`${prefix}kill`)) {
-  var killuser = message.mentions.members.first()
-            if(!killuser){
-              const killerror = new Discord.RichEmbed()
-              .setTitle('Error')
-              .setDescription(`Mention the user you would like to kill!`)
-              .setColor("#a500ff")
-              .setTimestamp()
-               return message.channel.send(killerror)
-            }
-            const killembed = new Discord.RichEmbed()
-            .setTimestamp()
-            .setFooter(`Requested by ${message.author.tag}`)
-            .setColor("#a500ff")
-            .setDescription(`${message.author} killed **${killuser}**.`)
-            message.channel.send(killembed)
-}
-  // kiss command
-  else if (message.content.startsWith(`${prefix}kiss`)) {
-    var kissuser = message.mentions.members.first()
-    if (!kissuser) {
-      const kisserror = new Discord.RichEmbed()
-        .setTitle('Error')
-        .setDescription(`Mention the user you would like to kiss!`)
-        .setColor("#a500ff")
-        .setTimestamp()
-      return message.channel.send(kisserror)
-    }
-    const kissembed = new Discord.RichEmbed()
-      .setFooter(`Requested by ${message.author.tag}`)
-      .setTimestamp()
-      .setColor("#a500ff")
-      .setDescription(`${message.author} gave **${kissuser}** a kiss!`)
-    message.channel.send(kissembed)
-  }
-
   // kill command
   else if (message.content.startsWith(`${prefix}kill`)) {
     var killuser = message.mentions.members.first()
@@ -184,37 +159,5 @@ else if (message.content.startsWith(`${prefix}kill`)) {
       })
   }
 
-  else if (message.content.startsWith(`${prefix}av`)) {
-    regex = /\?=size[0-9]{1,45}$/g;
-    memberMention = null;
-    if (message.mentions.members) {
-      memberMention = message.mentions.members.first()
-    }
-    if (message.mentions.users) {
-      userMention = message.mentions.users.first()
-    }
-    if (!memberMention) {
-      if (message.author.displayAvatarURL.indexOf(/\.gif\?size=[0-9]{1,49}$/g)) {
-        const av = new Discord.RichEmbed()
-          .setAuthor(`${message.author.username}'s Avatar`)
-          .setColor("#a500ff")
-          .setImage(message.author.avatarURL)
-          .setTimestamp()
-        return message.channel.send(av)
-      }
-      return message.channel.send(message.author.displayAvatarURL)
-    }
-    if (memberMention.user.displayAvatarURL.indexOf(/\.gif\?size=[0-9]{1,49}$/g)) {
-      const mentionav = new Discord.RichEmbed()
-        .setAuthor(`${memberMention.user.username}'s Avatar`)
-        .setColor(`#a500ff`)
-        .setImage(memberMention.user.avatarURL)
-        .setTimestamp()
-
-      return message.channel.send(mentionav)
-    }
-    message.channel.send(memberMention.user.displayAvatarURL)
-  }
-}
 });
 client.login(token);

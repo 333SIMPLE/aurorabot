@@ -60,7 +60,7 @@ module.exports = {
 
         server.queue.push(args[0]);
         if (server.queue[0])
-            message.channel.send("Song added to queue!")
+            message.channel.send(` **${song.title}** Was added to the queue!`)
 
 
 

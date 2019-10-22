@@ -41,7 +41,7 @@ function play(connection, message) {
 
 client.once('ready', () => {
   console.log(`Aurora is ready to go. Online on ${bot.guilds.size} Servers!`);
-  client.user.setActivity('In beta (2.3.0)!help', {
+  client.user.setActivity('In beta (2.3.1)!help', {
     type: 'PLAYING'
   });
 })

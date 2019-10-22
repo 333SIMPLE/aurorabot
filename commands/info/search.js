@@ -18,7 +18,13 @@ module.exports = {
         search(args.join(" "), function (err, res) {
             
             if (!message.member.voiceChannel) {
-                message.channel.send("You must be in a voice channel ")
+                const voiceerror = new Discord.RichEmbed()
+                .setAuthor("Error")
+                .setDescription(`You need to be in a voice channel!`)
+                .setTimestamp()
+                .setFooter(`Requested by ${message.author.tag}`)
+                .setColor(`#a500ff`)
+                  message.channel.send(voiceerror)
                 return;
             }
             

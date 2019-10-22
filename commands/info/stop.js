@@ -20,6 +20,12 @@ module.exports = {
           return;
         }
         if (message.guild.voiceConnection) message.guild.voiceConnection.disconnect();
-        message.channel.send("Ok Stopped")
+        const dc = new Discord.RichEmbed()
+        .setAuthor("Disconnect Report")
+        .setDescription(`Successfully disconnected from VC`)
+        .setTimestamp()
+        .setFooter(`Requested by ${message.author.tag}`)
+        .setColor(`#a500ff`)
+          message.channel.send(dc)
     } 
 }

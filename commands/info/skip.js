@@ -10,17 +10,22 @@ const servers = require("net");
 const search = require("yt-search");
 const fs = require("fs");
 module.exports = {
-    name: "skip",
-    category: "info",
-    description: "Returns latency and API ping",
-    run: async (client, message, args) => {
-        var server = servers[message.guild.id];
-        if (!message.member.voiceChannel) {
-          message.channel.send("You must be in a voice channel!")
-          return;
-        }
-        if (server && server.dispatcher) server.dispatcher.end();
-        console.log("song skipped")
-        message.channel.send("Skiping Song!")
-    } 
+  name: "skip",
+  category: "info",
+  description: "Returns latency and API ping",
+  run: async (client, message, args) => {
+    var server = servers[message.guild.id];
+    if (!message.member.voiceChannel) {
+      message.channel.send("You must be in a voice channel!")
+      return;
+    }
+    if (server && server.dispatcher) server.dispatcher.end();
+    const skipembed = new Discord.RichEmbed()
+      .setAuthor("Skip Report")
+      .setDescription(`Successfully skipped Song`)
+      .setTimestamp()
+      .setFooter(`Requested by ${message.author.tag}`)
+      .setColor(`#a500ff`)
+    message.channel.send(skipembed)
+  }
 }

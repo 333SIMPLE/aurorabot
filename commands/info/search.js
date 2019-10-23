@@ -16,20 +16,20 @@ module.exports = {
     description: "Returns latency and API ping",
     run: async (client, message, args, ops) => {
         search(args.join(" "), function (err, res) {
-            
+
             if (!message.member.voiceChannel) {
                 const voiceerror = new Discord.RichEmbed()
-                .setAuthor("Error")
-                .setDescription(`You need to be in a voice channel!`)
-                .setTimestamp()
-                .setFooter(`Requested by ${message.author.tag}`)
-                .setColor(`#a500ff`)
-                  message.channel.send(voiceerror)
+                    .setAuthor("Error")
+                    .setDescription(`You need to be in a voice channel!`)
+                    .setTimestamp()
+                    .setFooter(`Requested by ${message.author.tag}`)
+                    .setColor(`#a500ff`)
+                message.channel.send(voiceerror)
                 return;
             }
-            
+
             if (err) return message.channel.send("Sorry something went wrong try again");
-            
+
 
             let videos = res.videos.slice(0, 5);
 
@@ -48,11 +48,11 @@ module.exports = {
             collector.videos = videos;
 
             collector.once('collect', function (m) {
-                
+
                 let commandFile = require(`./play.js`);
-            
+
                 commandFile.run(client, message, [this.videos[parseInt(m.content) - 1].url], ops);
-               
+
 
             });
 

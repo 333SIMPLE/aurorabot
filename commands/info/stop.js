@@ -10,22 +10,22 @@ const servers = require("net");
 const search = require("yt-search");
 const fs = require("fs");
 module.exports = {
-    name: "stop",
-    category: "info",
-    description: "Returns latency and API ping",
-    run: async (client, message, args) => {
-        var server = servers[message.guild.id];
-        if (!message.member.voiceChannel) {
-          message.channel.send("You must be in a voice channel ")
-          return;
-        }
-        if (message.guild.voiceConnection) message.guild.voiceConnection.disconnect();
-        const dc = new Discord.RichEmbed()
-        .setAuthor("Disconnect Report")
-        .setDescription(`Successfully disconnected from VC`)
-        .setTimestamp()
-        .setFooter(`Requested by ${message.author.tag}`)
-        .setColor(`#a500ff`)
-          message.channel.send(dc)
-    } 
+  name: "stop",
+  category: "info",
+  description: "Returns latency and API ping",
+  run: async (client, message, args) => {
+    var server = servers[message.guild.id];
+    if (!message.member.voiceChannel) {
+      message.channel.send("You must be in a voice channel ")
+      return;
+    }
+    if (message.guild.voiceConnection) message.guild.voiceConnection.disconnect();
+    const dc = new Discord.RichEmbed()
+      .setAuthor("Disconnect Report")
+      .setDescription(`Successfully disconnected from VC`)
+      .setTimestamp()
+      .setFooter(`Requested by ${message.author.tag}`)
+      .setColor(`#a500ff`)
+    message.channel.send(dc)
+  }
 }

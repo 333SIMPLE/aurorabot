@@ -35,23 +35,23 @@ module.exports = {
 
         if (!args[0]) {
             const urlerror = new Discord.RichEmbed()
-            .setAuthor("Error")
-            .setDescription(`Please, input a **YouTube** URL following this`)
-            .setTimestamp()
-            .setFooter(`Requested by ${message.author.tag}`)
-            .setColor(`#a500ff`)
-              message.channel.send(urlerror)
+                .setAuthor("Error")
+                .setDescription(`Please, input a **YouTube** URL following this`)
+                .setTimestamp()
+                .setFooter(`Requested by ${message.author.tag}`)
+                .setColor(`#a500ff`)
+            message.channel.send(urlerror)
             return;
 
         }
         if (!message.member.voiceChannel) {
             const voiceerror = new Discord.RichEmbed()
-            .setAuthor("Error")
-            .setDescription(`You need to be in a voice channel!`)
-            .setTimestamp()
-            .setFooter(`Requested by ${message.author.tag}`)
-            .setColor(`#a500ff`)
-              message.channel.send(voiceerror)
+                .setAuthor("Error")
+                .setDescription(`You need to be in a voice channel!`)
+                .setTimestamp()
+                .setFooter(`Requested by ${message.author.tag}`)
+                .setColor(`#a500ff`)
+            message.channel.send(voiceerror)
             return;
         }
 
@@ -61,7 +61,7 @@ module.exports = {
         var server = servers[message.guild.id];
 
         let validate = YTDL.validateURL(args[0])
-        if (!validate) return  message.channel.send(`Sorry, pleast input a **valid** URL.(YouTube)`)
+        if (!validate) return message.channel.send(`Sorry, pleast input a **valid** URL.(YouTube)`)
 
         const songInfo = await YTDL.getInfo(args[0]);
         const song = {
@@ -78,12 +78,12 @@ module.exports = {
         if (!message.guild.voiceConnection) message.member.voiceChannel.join().then(function (connection) {
             play(connection, message)
             const playembed = new Discord.RichEmbed()
-            .setAuthor("	🎶")
-            .setDescription(`**Now Playing ${song.title}**`)
-            .setTimestamp()
-            .setFooter(`Requested by ${message.author.tag}`)
-            .setColor(`#a500ff`)
-              message.channel.send(playembed)
+                .setAuthor("	🎶")
+                .setDescription(`**Now Playing ${song.title}**`)
+                .setTimestamp()
+                .setFooter(`Requested by ${message.author.tag}`)
+                .setColor(`#a500ff`)
+            message.channel.send(playembed)
         });
 
 
